@@ -100,7 +100,7 @@ def prediction():
             # "prob2": probabilities[index[8]],
             # "prob3": probabilities[index[7]],
         }
-        print('text', text)
+        print('text', text[0])
         predictions = text
 
     # Step 5

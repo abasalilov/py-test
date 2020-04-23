@@ -26,30 +26,15 @@
       "
     >
       <h1 class="text-light mb-5">Your Prediction</h1>
-      <p class="text-light">My algorithm gave this prediction:</p>
+      <p class="text-light">Prediction</p>
       <table class="table-bordered text-light" style="width: 100%;">
-        <script>
-          console.log("preductions", predictions);
-        </script>
         <tr>
-          <th>Rank</th>
           <th>Class</th>
           <th>Probability</th>
         </tr>
         <tr>
-          <td>Most Likely:</td>
-          <td>{{ predictions[0] }}</td>
-          <td>{{ predictions.prob1 }}</td>
-        </tr>
-        <tr>
-          <td>2nd Most Likely:</td>
-          <td>{{ predictions.class2 }}</td>
-          <td>{{ predictions.prob2 }}</td>
-        </tr>
-        <tr>
-          <td>3rd Most Likely:</td>
-          <td>{{ predictions.class3 }}</td>
-          <td>{{ predictions.prob3 }}</td>
+          <td>{{ predictions[0][1] }}</td>
+          <td>{{ predictions[0][0] }}</td>
         </tr>
       </table>
       <a href="{{ url_for('main_page') }}"
