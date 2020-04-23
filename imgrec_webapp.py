@@ -51,6 +51,16 @@ def main_page():
     return render_template('index.html')
 
 
+@app.route('/templates', methods=['GET', 'POST'])
+def main_page():
+    if request.method == 'POST':
+        file = request.files['file']
+        filename = secure_filename(file.filename)
+        file.save(os.path.join('uploads', filename))
+        return redirect(url_for('prediction', filename=filename))
+    return render_template('index.html')
+
+
 @app.route('/prediction', methods=['POST', 'GET'])
 def prediction():
     if request.method == 'POST':
