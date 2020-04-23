@@ -43,16 +43,31 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
-    if request.method == 'POST':
-        file = request.files['file']
-        filename = secure_filename(file.filename)
-        file.save(os.path.join('uploads', filename))
-        return redirect(url_for('prediction', filename=filename))
-    return render_template('index.html')
-
-
-@app.route('/templates', methods=['GET', 'POST'])
-def main_page():
+    text = []
+    print('text1')
+    with graph.as_default():
+        print('graph')
+        set_session(sess)
+        input_range = net["input_range"]
+        noise_scale = (input_range[1]-input_range[0]) * 0.1
+        images, label_to_class_name = eutils.get_imagenet_data(
+            net["image_shape"][0])
+        model_wo_softmax = iutils.keras.graph.model_wo_softmax(model)
+        # Step 4
+        for i, (x, y) in enumerate(images):
+            x = x[None, :, :, :]
+            x_pp = imgnetutils.preprocess(x, net)
+            # Predict final activations, probabilites, and label.
+            # presm = model_wo_softmax.predict_on_batch(x_pp)[0]
+            prob = model.predict_on_batch(x_pp)[0]
+            y_hat = prob.argmax()
+            # Save prediction info:
+            text.append((
+                # "%.2f" % presm.max(),             # pre-softmax logits
+                "%.2f" % prob.max(),              # probabilistic softmax output
+                "%s" % label_to_class_name[y_hat]  # predicted label
+            ))
+    print("text2", text)
     if request.method == 'POST':
         file = request.files['file']
         filename = secure_filename(file.filename)
@@ -66,7 +81,6 @@ def prediction():
     if request.method == 'POST':
         print('here in post')
         data = request.get_data()
-        print('here')
         imageURL = data.decode("utf-8")
         # Add photo
         print("imageURL", str(imageURL).replace('"', ""))
