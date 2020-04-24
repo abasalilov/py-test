@@ -33,7 +33,7 @@ global sess
 sess = tf.Session()
 set_session(sess)
 global model
-model = load_model('compareMethods.h5')
+model = load_model('deployedNewModel.h5')
 global graph
 graph = tf.get_default_graph()
 
